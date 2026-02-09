@@ -1,5 +1,4 @@
-import {ErrorMessages} from "../enums/errorMessages.enum";
-
+import { ErrorMessages } from "../enums/errorMessages.enum";
 
 type HttpErrorNames = (typeof ErrorMessages)[keyof typeof ErrorMessages];
 
@@ -32,7 +31,7 @@ export class HttpError extends Error {
         return new HttpError(403, ErrorMessages.forbidden, errorMessage, errorDetails);
     }
 
-    public static notFound(errorMessage?: string, errorDetails?: unknown): HttpError {
+    public static notFound(errorMessage: string = "Entity is not found", errorDetails?: unknown): HttpError {
         return new HttpError(404, ErrorMessages.notFound, errorMessage, errorDetails);
     }
 
