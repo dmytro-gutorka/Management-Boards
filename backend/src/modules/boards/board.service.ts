@@ -1,4 +1,4 @@
-import { nanoid } from "nanoid";
+import { nanoid } from 'nanoid/non-secure';
 import { Board } from "./board.model";
 import { HttpError } from "../../common/HttpErrors";
 import { Card } from "../cards/card.model";

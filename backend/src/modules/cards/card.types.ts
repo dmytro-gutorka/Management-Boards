@@ -10,3 +10,6 @@ export type CardDto = {
     createdAt: Date;
     updatedAt: Date;
 };
+
+export type BoardParams = { boardId: string };
+export type CardParams = { boardId: string; cardId: string };
