@@ -2,8 +2,8 @@ import { Router } from "express";
 import { asyncHandler } from "../../middlewares/asyncHandler.middleware";
 import { boardController } from "./board.controller";
 
-export const boardRoutes = Router();
 
+export const boardRoutes = Router();
 
 boardRoutes.get("/:boardId", asyncHandler(boardController.getBoard));
 boardRoutes.post("/", asyncHandler(boardController.createBoard));
