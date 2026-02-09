@@ -1,5 +1,6 @@
 import {ErrorMessages} from "../enums/errorMessages.enum";
 
+
 type HttpErrorNames = (typeof ErrorMessages)[keyof typeof ErrorMessages];
 
 export class HttpError extends Error {
