@@ -1,18 +1,17 @@
-import { http } from './configurations/http.ts';
 import type { ApiResponse, Card, ColumnId } from './configurations/types.ts';
+import { http } from './configurations/http.ts';
 import { unwrap } from './configurations/unwrap.ts';
 
 
 export async function listCards(boardId: string) {
-  const cards = await http.get<ApiResponse<Card[]>>(`/boards/${boardId}/cards`);
-
-  return unwrap(cards)
+  return unwrap(await http.get<ApiResponse<Card[]>>(`/boards/${boardId}/cards`));
 }
 
-export async function createCard(boardId: string, input: { title: string; description?: string; column?: ColumnId }) {
-  const createdCard = await http.post<ApiResponse<Card>>(`/boards/${boardId}/cards`, input);
-
-  return unwrap(createdCard)
+export async function createCard(
+  boardId: string,
+  input: { title: string; description?: string; column?: ColumnId },
+) {
+  return unwrap(await http.post<ApiResponse<Card>>(`/boards/${boardId}/cards`, input));
 }
 
 export async function updateCard(
@@ -20,19 +19,17 @@ export async function updateCard(
   cardId: string,
   patch: Partial<{ title: string; description: string; column: ColumnId; order: number }>,
 ) {
-  const updateCard = await http.patch<ApiResponse<Card>>(`/boards/${boardId}/cards/${cardId}`, patch);
-
-  return unwrap(updateCard)
+  return unwrap(await http.patch<ApiResponse<Card>>(`/boards/${boardId}/cards/${cardId}`, patch));
 }
 
 export async function deleteCard(boardId: string, cardId: string) {
-  const deletedCard = await http.delete<ApiResponse<{ deleted: true }>>(`/boards/${boardId}/cards/${cardId}`);
-
-  return unwrap(deletedCard)
+  return unwrap(
+    await http.delete<ApiResponse<{ deleted: true }>>(`/boards/${boardId}/cards/${cardId}`),
+  );
 }
 
 export async function reorderCards(boardId: string, columns: Record<ColumnId, string[]>) {
-  const reorderedCards = await http.put<ApiResponse<{ ok: true }>>(`/boards/${boardId}/cards/reorder`, { columns });
-
-  return unwrap(reorderedCards)
+  return unwrap(
+    await http.put<ApiResponse<{ ok: true }>>(`/boards/${boardId}/cards/reorder`, { columns }),
+  );
 }

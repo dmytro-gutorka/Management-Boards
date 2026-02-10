@@ -9,6 +9,7 @@ class BoardService {
         const boardId = nanoid(10);
         const board = await Board.create({ boardId, name });
 
+        console.log(111)
         return { boardId: board.boardId, name: board.name };
     }
 

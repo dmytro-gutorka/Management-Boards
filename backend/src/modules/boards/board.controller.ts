@@ -7,6 +7,8 @@ import { BoardParams } from "./borad.types";
 class BoardController {
     createBoard = async (req: Request<BoardParams>, res: Response, next: NextFunction) => {
         const body = createBoardSchema.parse(req.body);
+        console.log(222)
+
         const data = await boardService.createBoard(body.name);
 
         res.status(201).json({ data });

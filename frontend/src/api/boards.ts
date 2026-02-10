@@ -4,25 +4,17 @@ import { unwrap } from './configurations/unwrap.ts';
 
 
 export async function createBoard(name: string) {
-  const createdBoard = await http.post<ApiResponse<Board>>('/boards', { name });
-
-  return unwrap(createdBoard);
+  return unwrap(await http.post<ApiResponse<Board>>('/boards', { name }));
 }
 
 export async function getBoard(boardId: string) {
-  const board = await http.get<ApiResponse<Board>>(`/boards/${boardId}`);
-
-  return unwrap(board);
+  return unwrap(await http.get<ApiResponse<Board>>(`/boards/${boardId}`));
 }
 
 export async function updateBoard(boardId: string, name: string) {
-  const updatedBoard = await http.patch<ApiResponse<Board>>(`/boards/${boardId}`, { name });
-
-  return unwrap(updatedBoard);
+  return unwrap(await http.patch<ApiResponse<Board>>(`/boards/${boardId}`, { name }));
 }
 
 export async function deleteBoard(boardId: string) {
-  const deletedBoard = await http.delete<ApiResponse<{ deleted: true }>>(`/boards/${boardId}`);
-
-  return unwrap(deletedBoard);
+  return unwrap(await http.delete<ApiResponse<{ deleted: true }>>(`/boards/${boardId}`));
 }
