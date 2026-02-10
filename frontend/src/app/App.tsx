@@ -3,7 +3,7 @@ import { useState } from 'react';
 import BoardPicker from '../features/board/BoardPicker';
 import BoardPage from '../features/board/BoardPage';
 import { MainPageHeader } from '../layout/MainPageHeader.tsx';
-import BoardsOverview from '../features/board/BoardsOverview.tsx';
+import { EmptyBoards } from '../features/board/EmptyBoards.tsx';
 
 export default function App() {
   const [boardId, setBoardId] = useState<string>('');
@@ -17,7 +17,7 @@ export default function App() {
           {boardId ? (
             <BoardPage boardId={boardId} onBoardDeleted={() => setBoardId('')} />
           ) : (
-            <BoardsOverview onOpenBoard={setBoardId} />
+            <EmptyBoards />
           )}
         </Stack>
       </Container>

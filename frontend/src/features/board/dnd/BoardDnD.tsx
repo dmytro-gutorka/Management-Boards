@@ -9,7 +9,11 @@ type UiColumns = Record<ColumnId, Card[]>;
 
 function findColumnByCardId(cols: UiColumns, cardId: string): ColumnId | null {
   const keys = Object.keys(cols) as ColumnId[];
-  for (const k of keys) if (cols[k].some((c) => c.id === cardId)) return k;
+
+  for (const key of keys) {
+    if (cols[key].some((c) => c.id === cardId)) return key;
+  }
+
   return null;
 }
 
@@ -67,17 +71,9 @@ export default function BoardDnD(props: {
   if (isLoading) return <CircularProgress />;
   if (error) return <Alert severity="error">Failed to load cards</Alert>;
 
-  const total = columns.todo.length + columns.in_progress.length + columns.done.length;
-
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <Stack spacing={2}>
-        {total === 0 ? (
-          <Alert severity="info">
-            No cards yet. Click <b>+</b> in any column to add your first card.
-          </Alert>
-        ) : null}
-
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} alignItems="flex-start">
           {COLUMNS.map((col) => (
             <Box key={col.id} sx={{ flex: 1, minWidth: 280 }}>

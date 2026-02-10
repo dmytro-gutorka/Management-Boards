@@ -1,9 +1,8 @@
-import { Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createBoard } from '../../api/boards';
-import OpenBoardDialog from './OpenBoardDialog.tsx';
-import CreateBoardDialog from './CreateBoardDialog.tsx';
+import FormDialog from '../../share/components/FormDialog.tsx';
 
 export default function BoardPicker({
   value,
@@ -12,9 +11,17 @@ export default function BoardPicker({
   value: string;
   onChange: (v: string) => void;
 }) {
+  const qc = useQueryClient();
+
   const [openOpen, setOpenOpen] = useState(false);
   const [openCreate, setOpenCreate] = useState(false);
-  const qc = useQueryClient();
+
+  const [boardIdInput, setBoardIdInput] = useState(value);
+  const [boardNameInput, setBoardNameInput] = useState('My board');
+
+  useEffect(() => {
+    setBoardIdInput(value);
+  }, [value]);
 
   const createMut = useMutation({
     mutationFn: (name: string) => createBoard(name),
@@ -48,22 +55,46 @@ export default function BoardPicker({
         </Stack>
       </Stack>
 
-      <OpenBoardDialog
+      <FormDialog
         open={openOpen}
-        initialValue={value}
+        title="Open board"
+        confirmText="Open"
         onClose={() => setOpenOpen(false)}
-        onSubmit={(boardId) => {
+        onConfirm={() => {
+          const id = boardIdInput.trim();
+          if (!id) return;
           setOpenOpen(false);
-          onChange(boardId);
+          onChange(id);
         }}
-      />
+        disableConfirm={!boardIdInput.trim()}
+      >
+        <TextField
+          label="Board ID"
+          value={boardIdInput}
+          onChange={(e) => setBoardIdInput(e.target.value)}
+          placeholder="e.g. Xh13Czv6O3"
+          autoFocus
+          fullWidth
+        />
+      </FormDialog>
 
-      <CreateBoardDialog
+      <FormDialog
         open={openCreate}
-        onClose={() => setOpenCreate(false)}
+        title="Create board"
+        confirmText="Create"
         isSubmitting={createMut.isPending}
-        onSubmit={(name) => createMut.mutate(name)}
-      />
+        disableConfirm={!boardNameInput.trim()}
+        onClose={() => setOpenCreate(false)}
+        onConfirm={() => createMut.mutate(boardNameInput.trim())}
+      >
+        <TextField
+          label="Board name"
+          value={boardNameInput}
+          onChange={(e) => setBoardNameInput(e.target.value)}
+          autoFocus
+          fullWidth
+        />
+      </FormDialog>
     </>
   );
 }
