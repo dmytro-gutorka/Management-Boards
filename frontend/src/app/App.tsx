@@ -1,9 +1,9 @@
 import { Container, Stack } from '@mui/material';
 import { useState } from 'react';
-import BoardPicker from '../features/board/BoardPicker';
-import BoardPage from '../features/board/BoardPage';
+import BoardPicker from '../features/board/components/BoardPicker.tsx';
+import BoardPage from '../features/board/components/BoardPage.tsx';
 import { MainPageHeader } from '../layout/MainPageHeader.tsx';
-import { EmptyBoards } from '../features/board/EmptyBoards.tsx';
+import { EmptyBoards } from '../features/board/components/EmptyBoards.tsx';
 
 export default function App() {
   const [boardId, setBoardId] = useState<string>('');

@@ -1,5 +1,5 @@
 import { Stack, Typography, useTheme } from '@mui/material';
-import { LogoIcon } from '../../share/components/LogoIcon.tsx';
+import { LogoIcon } from '../../../share/components/LogoIcon.tsx';
 
 export function EmptyBoards() {
   const theme = useTheme();

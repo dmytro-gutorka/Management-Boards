@@ -7,7 +7,7 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import { useEffect, useMemo, useState } from 'react';
+import { useState } from 'react';
 import type { Card, ColumnId } from '../../api/configurations/types.ts';
 
 type Mode = 'create' | 'edit';
@@ -25,21 +25,8 @@ export default function CardDialog(props: {
 }) {
   const { open, mode, card, onClose, onSubmit, onDelete, isSaving, isDeleting } = props;
 
-  const initial = useMemo(
-    () => ({
-      title: card?.title ?? '',
-      description: card?.description ?? '',
-    }),
-    [card],
-  );
-
-  const [title, setTitle] = useState(initial.title);
-  const [description, setDescription] = useState(initial.description);
-
-  useEffect(() => {
-    setTitle(initial.title);
-    setDescription(initial.description);
-  }, [initial]);
+  const [title, setTitle] = useState(card?.title ?? '');
+  const [description, setDescription] = useState(card?.description ?? '');
 
   const canSubmit = title.trim().length > 0;
 

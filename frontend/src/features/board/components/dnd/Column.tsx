@@ -2,8 +2,8 @@ import { Card as MUICard, CardContent, IconButton, Stack, Typography } from '@mu
 import AddIcon from '@mui/icons-material/Add';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useDroppable } from '@dnd-kit/core';
-import CardItem from '../../cards/CardItem.tsx';
-import type { Card, ColumnId } from '../../../api/configurations/types.ts';
+import CardItem from '../../../cards/CardItem.tsx';
+import type { Card, ColumnId } from '../../../../api/configurations/types.ts';
 
 export default function Column(props: {
   columnId: ColumnId;
