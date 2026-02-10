@@ -1,4 +1,4 @@
-import type { ColumnId } from '../../api/configurations/types.ts';
+import type { ColumnId } from '../../../api/configurations/types.ts';
 
 
 export const COLUMNS: { id: ColumnId; title: string }[] = [

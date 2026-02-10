@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-export const theme = createTheme({
+export const baseTheme = createTheme({
   typography: {
     fontFamily: "Noto Sans",
   },
@@ -12,5 +12,42 @@ export const theme = createTheme({
   shape: {
     borderRadiusXSS: 1,
     borderRadiusXS: 3,
+    borderRadiusM: 10,
+
   }
+});
+
+export const theme = createTheme(baseTheme, {
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: "contained" },
+          style: {
+            fontWeight: 700,
+            textTransform: "capitalize",
+            fontSize: baseTheme.spacing(2),
+            borderRadius: baseTheme.shape.borderRadiusM,
+            paddingBlock: baseTheme.spacing(1),
+            paddingInline: baseTheme.spacing(2.5),
+            backgroundImage: baseTheme.palette.blue.gradient
+          },
+        },
+        {
+          props: { variant: "outlined" },
+          style: {
+            fontWeight: 400,
+            textTransform: "capitalize",
+            fontSize: baseTheme.spacing(2),
+            borderRadius: baseTheme.shape.borderRadiusM,
+            paddingBlock: baseTheme.spacing(1),
+            paddingInline: baseTheme.spacing(2.5),
+            backgroundColor: "white",
+            color:"black",
+            border: "2px solid rgb(203 213 225)",
+          },
+        },
+      ],
+    },
+  },
 });

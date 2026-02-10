@@ -16,9 +16,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useMemo, useState } from 'react';
 import { deleteBoard, updateBoard } from '../../api/boards';
 import type { Board } from '../../api/configurations/types.ts';
-import ConfirmDialog from './dialogs/ConfirmDialog.tsx';
+import ConfirmDialog from './ConfirmDialog.tsx';
 
-export default function BoardHeader({ board }: { board: Board }) {
+type BoardHeaderProps = {
+  board: Board;
+  onDeleted: () => void;
+};
+
+export default function BoardHeader({ board, onDeleted }: BoardHeaderProps) {
   const qc = useQueryClient();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
@@ -27,12 +32,16 @@ export default function BoardHeader({ board }: { board: Board }) {
   const [snack, setSnack] = useState<string | null>(null);
   const [errorSnack, setErrorSnack] = useState<string | null>(null);
 
-  const canSave = useMemo(() => name.trim().length > 0 && name.trim() !== board.name, [name, board]);
+  const canSave = useMemo(
+    () => name.trim().length > 0 && name.trim() !== board.name,
+    [name, board],
+  );
 
   const updateMut = useMutation({
     mutationFn: (newName: string) => updateBoard(board.boardId, newName),
     onSuccess: (updated) => {
       qc.setQueryData(['board', board.boardId], updated);
+      qc.invalidateQueries({ queryKey: ['boards'] });
       setIsEditing(false);
       setSnack('Board renamed');
     },
@@ -42,11 +51,13 @@ export default function BoardHeader({ board }: { board: Board }) {
   const deleteMut = useMutation({
     mutationFn: () => deleteBoard(board.boardId),
     onSuccess: () => {
+      setConfirmOpen(false);
+
       qc.removeQueries({ queryKey: ['board', board.boardId] });
       qc.removeQueries({ queryKey: ['cards', board.boardId] });
-      window.location.reload();
+      qc.invalidateQueries({ queryKey: ['boards'] });
 
-      setConfirmOpen(false)
+      onDeleted()
     },
     onError: () => setErrorSnack('Failed to delete board'),
   });
@@ -87,7 +98,11 @@ export default function BoardHeader({ board }: { board: Board }) {
           ) : null}
 
           <Tooltip title="Delete board">
-            <IconButton color="error" onClick={() => setConfirmOpen(true)} disabled={deleteMut.isPending}>
+            <IconButton
+              color="error"
+              onClick={() => setConfirmOpen(true)}
+              disabled={deleteMut.isPending}
+            >
               <DeleteOutlineIcon />
             </IconButton>
           </Tooltip>
@@ -136,11 +151,7 @@ export default function BoardHeader({ board }: { board: Board }) {
         onClose={() => setSnack(null)}
         message={snack ?? ''}
       />
-      <Snackbar
-        open={!!errorSnack}
-        autoHideDuration={2500}
-        onClose={() => setErrorSnack(null)}
-      >
+      <Snackbar open={!!errorSnack} autoHideDuration={2500} onClose={() => setErrorSnack(null)}>
         <Alert severity="error" onClose={() => setErrorSnack(null)}>
           {errorSnack}
         </Alert>
@@ -156,8 +167,6 @@ export default function BoardHeader({ board }: { board: Board }) {
         onClose={() => setConfirmOpen(false)}
         onConfirm={() => deleteMut.mutate()}
       />
-
     </Stack>
-
   );
 }

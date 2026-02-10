@@ -3,11 +3,15 @@ import { createBoardSchema, updateBoardSchema } from "./board.validation";
 import { boardService } from "./board.service";
 import { BoardParams } from "./borad.types";
 
-
 class BoardController {
+    listBoards = async (req: Request, res: Response) => {
+        const data = await boardService.listBoards();
+
+        res.status(200).json({ data });
+    };
+
     createBoard = async (req: Request<BoardParams>, res: Response, next: NextFunction) => {
         const body = createBoardSchema.parse(req.body);
-        console.log(222)
 
         const data = await boardService.createBoard(body.name);
 

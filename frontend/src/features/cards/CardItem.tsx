@@ -1,7 +1,7 @@
 import { Card as MUICard, CardContent, Typography } from '@mui/material';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import type { Card } from '../../../api/configurations/types.ts';
+import type { Card } from '../../api/configurations/types.ts';
 import type { CSSProperties } from 'react';
 
 export default function CardItem({ card, onClick }: { card: Card; onClick: () => void }) {

@@ -5,11 +5,19 @@ import { Card } from "../cards/card.model";
 
 
 class BoardService {
+    async listBoards() {
+        const boards = await Board.find({})
+            .sort({ createdAt: -1 })
+            .select({ _id: 0, boardId: 1, name: 1 })
+            .lean();
+
+        return boards;
+    }
+
     async createBoard(name: string) {
         const boardId = nanoid(10);
         const board = await Board.create({ boardId, name });
 
-        console.log(111)
         return { boardId: board.boardId, name: board.name };
     }
 

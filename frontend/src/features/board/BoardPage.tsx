@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { getBoard } from '../../api/boards';
 import { createCard, deleteCard, listCards, reorderCards, updateCard } from '../../api/cards';
 import BoardDnD from './dnd/BoardDnD';
-import CardDialog from './dialogs/CardDialog';
+import CardDialog from '../cards/CardDialog.tsx';
 import type { Card, ColumnId } from '../../api/configurations/types.ts';
 import BoardHeader from './BoardHeader.tsx';
 
@@ -17,7 +17,12 @@ function cardsToColumns(cards: Card[]): UiColumns {
   return base;
 }
 
-export default function BoardPage({ boardId }: { boardId: string }) {
+type BoardPageProps = {
+  boardId: string
+  onBoardDeleted: () => void
+}
+
+export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
   const qc = useQueryClient();
 
   const boardQ = useQuery({
@@ -110,7 +115,7 @@ export default function BoardPage({ boardId }: { boardId: string }) {
 
   return (
     <Stack spacing={2}>
-      <BoardHeader board={boardQ.data!} />
+      <BoardHeader board={boardQ.data!} onDeleted={onBoardDeleted} />
 
       <BoardDnD
         columns={uiColumns}

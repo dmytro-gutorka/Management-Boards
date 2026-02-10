@@ -8,7 +8,7 @@ import {
   TextField,
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
-import type { Card, ColumnId } from '../../../api/configurations/types.ts';
+import type { Card, ColumnId } from '../../api/configurations/types.ts';
 
 type Mode = 'create' | 'edit';
 

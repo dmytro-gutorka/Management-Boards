@@ -1,7 +1,7 @@
 import { Alert, CircularProgress, Stack, Box } from '@mui/material';
 import { DndContext, type DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
-import { COLUMNS } from '../columns';
+import { COLUMNS } from '../configs/columns.ts';
 import Column from './Column';
 import type { Card, ColumnId } from '../../../api/configurations/types.ts';
 
