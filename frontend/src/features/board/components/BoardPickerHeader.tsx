@@ -1,7 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-
 type Props = {
   onOpenBoard: () => void;
   onCreateBoard: () => void;
@@ -19,12 +18,12 @@ export function BoardPickerHeader({ onOpenBoard, onCreateBoard }: Props) {
         </Stack>
 
         <Stack flexDirection="row" gap={2} alignItems="center">
-          <Button variant="outlined" onClick={onOpenBoard} startIcon={<SearchIcon/>}>
+          <Button variant="outlined" onClick={onOpenBoard} startIcon={<SearchIcon />}>
             Join board
           </Button>
 
           <Button variant="contained" onClick={onCreateBoard}>
-           + Create board
+            + Create board
           </Button>
         </Stack>
       </Stack>

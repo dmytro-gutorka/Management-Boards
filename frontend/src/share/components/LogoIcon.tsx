@@ -1,6 +1,6 @@
 type LogoIconProps = {
-  color?: string
-}
+  color?: string;
+};
 
 export function LogoIcon({ color = 'white' }: LogoIconProps) {
   return (
@@ -20,5 +20,5 @@ export function LogoIcon({ color = 'white' }: LogoIconProps) {
       <rect width="7" height="9" x="14" y="12" rx="1"></rect>
       <rect width="7" height="5" x="3" y="16" rx="1"></rect>
     </svg>
-  )
+  );
 }

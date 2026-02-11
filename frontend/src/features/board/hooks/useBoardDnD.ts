@@ -9,9 +9,7 @@ import type { ColumnProp, UseBoardDnDArgs, UseBoardDnDResult } from '../types/co
 export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDnDResult {
   const columnIds = useMemo(() => getColumnIds(), []);
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 5 } })
-  );
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
   const cardToColumn = useMemo(() => {
     const map = new Map<string, ColumnId>();
@@ -26,7 +24,7 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
 
   const isColumnId = useCallback(
     (id: string): id is ColumnId => (columnIds as string[]).includes(id),
-    [columnIds]
+    [columnIds],
   );
 
   const resolveTargetColumn = useCallback(
@@ -35,7 +33,7 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
 
       return cardToColumn.get(overId) ?? fallback;
     },
-    [cardToColumn, isColumnId]
+    [cardToColumn, isColumnId],
   );
 
   const totalCards = useMemo(() => {
@@ -88,7 +86,6 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
     },
     [cardToColumn, resolveTargetColumn, columns, columnIds, onReorder],
   );
-
 
   return {
     sensors,

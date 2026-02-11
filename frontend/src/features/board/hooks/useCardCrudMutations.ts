@@ -49,10 +49,10 @@ export function useCardCrudMutations(args: {
   const deleteByIdMut = useMutation({
     mutationFn: (cardId: string) => deleteCard(boardId, cardId),
     onSuccess: () => {
-      onDone()
+      onDone();
       invalidate();
-    }
+    },
   });
 
-  return { createMut, updateMut, deleteMut, deleteByIdMut};
+  return { createMut, updateMut, deleteMut, deleteByIdMut };
 }

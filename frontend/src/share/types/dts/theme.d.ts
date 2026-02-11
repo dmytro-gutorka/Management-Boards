@@ -1,11 +1,11 @@
-import "@mui/material/styles";
-import type { ThemePaletteColorMap } from "@/shared/types/mui-theme.configs.ts";
+import '@mui/material/styles';
+import type { ThemePaletteColorMap } from '@/shared/types/mui-theme.configs.ts';
 
 export type ThemePaletteColorMap = {
   gradient: string;
 };
 
-declare module "@mui/material/styles" {
+declare module '@mui/material/styles' {
   interface Palette {
     blue: ThemePaletteColorMap;
   }
@@ -14,7 +14,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-declare module "@mui/system/" {
+declare module '@mui/system/' {
   interface Shape {
     borderRadiusXSS: number;
     borderRadiusXS: number;

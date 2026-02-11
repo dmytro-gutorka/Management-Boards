@@ -37,7 +37,7 @@ export default function CardItem({ card, onEdit, onDelete }: CardItemProps) {
       <CardContent sx={{ py: 1.2, '&:last-child': { pb: 1.2 } }}>
         <Stack flexDirection="row" justifyContent="space-between">
           <Stack flexDirection="row" gap={1}>
-            <Tooltip title="Drag" sx={{ placeSelf: "start" }}>
+            <Tooltip title="Drag" sx={{ placeSelf: 'start' }}>
               <IconButton
                 size="small"
                 {...attributes}
@@ -59,7 +59,13 @@ export default function CardItem({ card, onEdit, onDelete }: CardItemProps) {
             </Stack>
           </Stack>
 
-          <Stack direction="row" ml={1} spacing={0.5} alignItems="center" sx={{ placeSelf: "start" }}>
+          <Stack
+            direction="row"
+            ml={1}
+            spacing={0.5}
+            alignItems="center"
+            sx={{ placeSelf: 'start' }}
+          >
             <Tooltip title="Edit">
               <IconButton
                 size="small"

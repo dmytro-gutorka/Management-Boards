@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback } from 'react';
 
 type Args = {
   externalValue: string;
@@ -6,11 +6,9 @@ type Args = {
 
 export function useEditableName({ externalValue }: Args) {
   const [isEditing, setIsEditing] = useState(false);
-  const [value, setValue] = useState(externalValue);
+  const [draft, setDraft] = useState(externalValue);
 
-  useEffect(() => {
-    if (!isEditing) setValue(externalValue);
-  }, [externalValue, isEditing]);
+  const value = isEditing ? draft : externalValue;
 
   const trimmed = useMemo(() => value.trim(), [value]);
 
@@ -18,11 +16,19 @@ export function useEditableName({ externalValue }: Args) {
     return trimmed.length > 0 && trimmed !== externalValue;
   }, [trimmed, externalValue]);
 
-  const start = useCallback(() => setIsEditing(true), []);
+  const start = useCallback(() => {
+    setDraft(externalValue);
+    setIsEditing(true);
+  }, [externalValue]);
+
   const cancel = useCallback(() => {
     setIsEditing(false);
-    setValue(externalValue);
+    setDraft(externalValue);
   }, [externalValue]);
+
+  const setValue = useCallback((next: string) => {
+    setDraft(next);
+  }, []);
 
   return {
     isEditing,

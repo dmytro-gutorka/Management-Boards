@@ -8,7 +8,6 @@ import { queryClient } from './app/queryClient';
 import { theme } from './app/theme';
 import App from './app/App';
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>

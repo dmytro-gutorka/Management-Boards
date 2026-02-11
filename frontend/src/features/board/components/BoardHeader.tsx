@@ -8,7 +8,6 @@ import { useBoardHeaderActions } from '../hooks/useBoardHeaderActions';
 import { BoardNameEditor } from './BoardNameEditor';
 import { SnackRenderer } from './SnackRenderer';
 
-
 type Props = { board: Board; onDeleted: () => void };
 
 export default function BoardHeader({ board, onDeleted }: Props) {
@@ -28,7 +27,16 @@ export default function BoardHeader({ board, onDeleted }: Props) {
   };
 
   return (
-    <Stack spacing={1} sx={{ p: 2, borderRadius: 3, border: '1px solid', borderColor: 'divider', background: 'white' }}>
+    <Stack
+      spacing={1}
+      sx={{
+        p: 2,
+        borderRadius: 3,
+        border: '1px solid',
+        borderColor: 'divider',
+        background: 'white',
+      }}
+    >
       <BoardCard
         board={board}
         isEditing={editable.isEditing}

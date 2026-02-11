@@ -2,7 +2,6 @@ import { http } from './configurations/http.ts';
 import type { ApiResponse, Board } from './configurations/types.ts';
 import { unwrap } from './configurations/unwrap.ts';
 
-
 export async function createBoard(name: string) {
   return unwrap(await http.post<ApiResponse<Board>>('/boards', { name }));
 }

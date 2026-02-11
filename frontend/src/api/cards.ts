@@ -2,7 +2,6 @@ import type { ApiResponse, Card, ColumnId } from './configurations/types.ts';
 import { http } from './configurations/http.ts';
 import { unwrap } from './configurations/unwrap.ts';
 
-
 export async function listCards(boardId: string) {
   return unwrap(await http.get<ApiResponse<Card[]>>(`/boards/${boardId}/cards`));
 }

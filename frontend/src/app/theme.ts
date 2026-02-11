@@ -2,19 +2,18 @@ import { createTheme } from '@mui/material/styles';
 
 export const baseTheme = createTheme({
   typography: {
-    fontFamily: "Noto Sans",
+    fontFamily: 'Noto Sans',
   },
   palette: {
     blue: {
-      gradient: "linear-gradient(to bottom right, #3b82f6, #06b6d4)"
-    }
+      gradient: 'linear-gradient(to bottom right, #3b82f6, #06b6d4)',
+    },
   },
   shape: {
     borderRadiusXSS: 1,
     borderRadiusXS: 3,
     borderRadiusM: 10,
-
-  }
+  },
 });
 
 export const theme = createTheme(baseTheme, {

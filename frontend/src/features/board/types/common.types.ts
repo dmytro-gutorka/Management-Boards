@@ -1,7 +1,8 @@
-import { type DragEndEvent, useSensors } from '@dnd-kit/core';
+import type { useSensors } from '@dnd-kit/core';
+import { type DragEndEvent } from '@dnd-kit/core';
 import type { Card, ColumnId } from '../../../api/configurations/types.ts';
 
-export type ColumnProp = { id: string }
+export type ColumnProp = { id: string };
 
 export type UiColumns = Record<ColumnId, Card[]>;
 

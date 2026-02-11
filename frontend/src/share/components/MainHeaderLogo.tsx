@@ -12,7 +12,7 @@ export function MainHeaderLogo() {
       justifyContent="center"
       sx={{ backgroundImage: theme.palette.blue.gradient, borderRadius: 3 }}
     >
-      <LogoIcon/>
+      <LogoIcon />
     </Stack>
   );
 }

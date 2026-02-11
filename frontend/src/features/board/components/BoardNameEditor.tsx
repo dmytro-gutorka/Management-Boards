@@ -49,9 +49,7 @@ export function BoardNameEditor({
           <Typography variant="body1" fontWeight={700}>
             Board Name:
           </Typography>
-          <Typography variant="body2">
-            {title}
-          </Typography>
+          <Typography variant="body2">{title}</Typography>
         </Stack>
       )}
     </Stack>
