@@ -1,16 +1,14 @@
-import { Types } from 'mongoose';
-import { Board } from '../boards/board.model';
-import { Card, Column } from './card.model';
+import { Types } from "mongoose";
+import { Board } from "../boards/board.model";
+import { Card, Column } from "./card.model";
 import { HttpError } from "../../common/HttpErrors";
 import { toDto } from "./card.mappers";
 
-
 export class CardService {
-
     private async ensureBoard(boardId: string) {
         const board = await Board.findOne({ boardId }).lean();
 
-        if (!board) throw HttpError.notFound('Board not found');
+        if (!board) throw HttpError.notFound("Board not found");
     }
 
     async list(boardId: string) {
@@ -26,14 +24,16 @@ export class CardService {
     async create(boardId: string, input: { title: string; description?: string; column: Column }) {
         await this.ensureBoard(boardId);
 
-        const last = await Card.findOne({ boardId, column: input.column }).sort({ order: -1 }).lean();
+        const last = await Card.findOne({ boardId, column: input.column })
+            .sort({ order: -1 })
+            .lean();
         const nextOrder = last ? last.order + 1 : 0;
 
         const card = await Card.create({
             boardId,
             column: input.column,
             title: input.title,
-            description: input.description ?? '',
+            description: input.description ?? "",
             order: nextOrder,
         });
 
@@ -47,11 +47,13 @@ export class CardService {
     ) {
         await this.ensureBoard(boardId);
 
-        if (!Types.ObjectId.isValid(cardId)) throw HttpError.badRequest('Invalid cardId');
+        if (!Types.ObjectId.isValid(cardId)) throw HttpError.badRequest("Invalid cardId");
 
-        const card = await Card.findOneAndUpdate({ _id: cardId, boardId }, patch, { new: true }).lean();
+        const card = await Card.findOneAndUpdate({ _id: cardId, boardId }, patch, {
+            new: true,
+        }).lean();
 
-        if (!card) throw HttpError.notFound('Card not found');
+        if (!card) throw HttpError.notFound("Card not found");
 
         return toDto(card);
     }
@@ -59,11 +61,11 @@ export class CardService {
     async delete(boardId: string, cardId: string) {
         await this.ensureBoard(boardId);
 
-        if (!Types.ObjectId.isValid(cardId)) throw HttpError.badRequest('Invalid cardId');
+        if (!Types.ObjectId.isValid(cardId)) throw HttpError.badRequest("Invalid cardId");
 
         const card = await Card.findOneAndDelete({ _id: cardId, boardId }).lean();
 
-        if (!card) throw HttpError.notFound('Card not found');
+        if (!card) throw HttpError.notFound("Card not found");
 
         return { deleted: true };
     }
@@ -81,7 +83,7 @@ export class CardService {
         const uniq = new Set(allIds);
 
         if (uniq.size !== allIds.length) {
-            throw HttpError.badRequest('Duplicate card ids in reorder payload');
+            throw HttpError.badRequest("Duplicate card ids in reorder payload");
         }
 
         for (const id of allIds) {
@@ -92,7 +94,8 @@ export class CardService {
 
         const found = await Card.countDocuments({ boardId, _id: { $in: objectIds } });
 
-        if (found !== allIds.length) throw HttpError.badRequest('Some cards not found in this board');
+        if (found !== allIds.length)
+            throw HttpError.badRequest("Some cards not found in this board");
 
         const makeOps = (column: Column, ids: string[]) =>
             ids.map((id, idx) => ({
@@ -103,9 +106,9 @@ export class CardService {
             }));
 
         const ops = [
-            ...makeOps('todo', columns.todo),
-            ...makeOps('in_progress', columns.in_progress),
-            ...makeOps('done', columns.done),
+            ...makeOps("todo", columns.todo),
+            ...makeOps("in_progress", columns.in_progress),
+            ...makeOps("done", columns.done),
         ];
 
         await Card.bulkWrite(ops, { ordered: false });

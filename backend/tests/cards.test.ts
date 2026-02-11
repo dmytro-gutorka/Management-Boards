@@ -1,7 +1,6 @@
-import request from 'supertest';
-import { createApp } from '../src/app';
+import request from "supertest";
+import { createApp } from "../src/app";
 import { clearTestDb, connectTestDb, disconnectTestDb } from "./db";
-
 
 const app = createApp();
 
@@ -17,12 +16,18 @@ afterAll(async () => {
     await disconnectTestDb();
 });
 
-test('create cards + reorder', async () => {
-    const b = await request(app).post('/api/v1/boards').send({ name: 'B' }).expect(201);
+test("create cards + reorder", async () => {
+    const b = await request(app).post("/api/v1/boards").send({ name: "B" }).expect(201);
     const boardId = b.body.data.boardId;
 
-    const c1 = await request(app).post(`/api/v1/boards/${boardId}/cards`).send({ title: 'A' }).expect(201);
-    const c2 = await request(app).post(`/api/v1/boards/${boardId}/cards`).send({ title: 'B' }).expect(201);
+    const c1 = await request(app)
+        .post(`/api/v1/boards/${boardId}/cards`)
+        .send({ title: "A" })
+        .expect(201);
+    const c2 = await request(app)
+        .post(`/api/v1/boards/${boardId}/cards`)
+        .send({ title: "B" })
+        .expect(201);
 
     const id1 = c1.body.data.id;
     const id2 = c2.body.data.id;

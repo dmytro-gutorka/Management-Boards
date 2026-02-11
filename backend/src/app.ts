@@ -6,7 +6,6 @@ import { notFound } from "./middlewares/notFound.middleware";
 import { errorMiddleware } from "./middlewares/error.middleware";
 import { router } from "./modules";
 
-
 export function createApp() {
     const app = express();
 
@@ -16,7 +15,7 @@ export function createApp() {
 
     app.use(morgan("dev"));
 
-    app.use('/api/v1', router)
+    app.use("/api/v1", router);
 
     app.use(notFound);
     app.use(errorMiddleware);

@@ -1,9 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 export async function connectTestDb() {
     const uri = process.env.TEST_MONGO_URI;
 
-    if (!uri) throw new Error('TEST_MONGO_URI is not set');
+    if (!uri) throw new Error("TEST_MONGO_URI is not set");
 
     await mongoose.connect(uri);
 }

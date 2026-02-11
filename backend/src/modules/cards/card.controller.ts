@@ -3,7 +3,6 @@ import { createCardSchema, reorderSchema, updateCardSchema } from "./card.valida
 import { cardService } from "./card.service";
 import { BoardParams, CardParams } from "./card.types";
 
-
 class CardController {
     list = async (req: Request<BoardParams>, res: Response) => {
         const data = await cardService.list(req.params.boardId);
