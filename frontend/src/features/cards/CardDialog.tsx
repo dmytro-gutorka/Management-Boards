@@ -48,8 +48,8 @@ export default function CardDialog(props: {
         },
       }}
     >
-      <DialogTitle>
-        <Typography variant="h6" fontWeight={700}>
+      <DialogTitle component="div">
+        <Typography variant="h6" fontWeight={700} component="div">
           {mode === 'create' ? 'Add card' : 'Edit card'}
         </Typography>
       </DialogTitle>
