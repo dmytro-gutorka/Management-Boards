@@ -5,6 +5,7 @@ import type { ColumnId } from '../../../api/configurations/types';
 import { getColumnIds } from '../utils/getColumnIds.ts';
 import { cloneColumns } from '../utils/cloneColumns.ts';
 import type { ColumnProp, UseBoardDnDArgs, UseBoardDnDResult } from '../types/common.types.ts';
+import { sanitizeColumns } from '../utils/sanitizeColumns.ts';
 
 export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDnDResult {
   const columnIds = useMemo(() => getColumnIds(), []);
@@ -44,38 +45,29 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
     (e: DragEndEvent) => {
       const activeId = String(e.active.id);
       const overId = e.over?.id ? String(e.over.id) : null;
-
-      if (!overId) return;
-      if (activeId === overId) return;
+      if (!overId || activeId === overId) return;
 
       const fromCol = cardToColumn.get(activeId);
       if (!fromCol) return;
 
       const toCol = resolveTargetColumn(overId, fromCol);
+
       const next = cloneColumns(columns, columnIds);
 
       const fromIdx = next[fromCol].findIndex((c: ColumnProp) => c.id === activeId);
-
       if (fromIdx < 0) return;
 
-      const [moved] = next[fromCol].splice(fromIdx, 1);
-
-      if (!moved) return;
       if (toCol === fromCol) {
         const toIdx = next[toCol].findIndex((c: ColumnProp) => c.id === overId);
+        if (toIdx < 0) return;
 
-        if (toIdx < 0) {
-          next[toCol].push(moved);
-          onReorder(next);
-          return;
-        }
-
-        const adjustedToIdx = toIdx > fromIdx ? toIdx - 1 : toIdx;
-
-        next[toCol] = arrayMove(next[toCol], fromIdx, adjustedToIdx);
+        next[toCol] = arrayMove(next[toCol], fromIdx, toIdx);
         onReorder(next);
         return;
       }
+
+      const [moved] = next[fromCol].splice(fromIdx, 1);
+      if (!moved) return;
 
       const toIdx = next[toCol].findIndex((c: ColumnProp) => c.id === overId);
       const insertIdx = toIdx >= 0 ? toIdx : next[toCol].length;
