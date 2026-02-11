@@ -29,6 +29,7 @@ export function CreateBoardDialog({
       disableConfirm={disableConfirm}
       onClose={onClose}
       onConfirm={onConfirm}
+      subtitle="Give your board a name to get started"
     >
       <TextField
         label="Board name"

@@ -1,5 +1,5 @@
 import { Box, Container, Stack, Typography, useTheme } from '@mui/material';
-import { MainHeaderLogo } from '../share/components/MainHeaderLogo.tsx';
+import { MainHeaderLogo } from './MainHeaderLogo.tsx';
 
 
 export function MainPageHeader() {

@@ -21,7 +21,8 @@ export function OpenBoardDialog({
   return (
     <FormDialog
       open={open}
-      title="Open board"
+      title="Join a board"
+      subtitle="Enter the board ID to access it"
       confirmText="Open"
       onClose={onClose}
       onConfirm={onConfirm}

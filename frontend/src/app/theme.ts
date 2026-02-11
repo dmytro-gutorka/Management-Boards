@@ -20,34 +20,55 @@ export const baseTheme = createTheme({
 export const theme = createTheme(baseTheme, {
   components: {
     MuiButton: {
-      variants: [
-        {
-          props: { variant: "contained" },
-          style: {
-            fontWeight: 700,
-            textTransform: "capitalize",
-            fontSize: baseTheme.spacing(2),
-            borderRadius: baseTheme.shape.borderRadiusM,
-            paddingBlock: baseTheme.spacing(1),
-            paddingInline: baseTheme.spacing(2.5),
-            backgroundImage: baseTheme.palette.blue.gradient
+      styleOverrides: {
+        root: {
+          textTransform: 'capitalize',
+          borderRadius: baseTheme.shape.borderRadiusM,
+          paddingBlock: baseTheme.spacing(1),
+          paddingInline: baseTheme.spacing(2.5),
+
+          '&.Mui-disabled': {
+            cursor: 'not-allowed',
+            pointerEvents: 'auto',
           },
         },
-        {
-          props: { variant: "outlined" },
-          style: {
-            fontWeight: 400,
-            textTransform: "capitalize",
-            fontSize: baseTheme.spacing(2),
-            borderRadius: baseTheme.shape.borderRadiusM,
-            paddingBlock: baseTheme.spacing(1),
-            paddingInline: baseTheme.spacing(2.5),
-            backgroundColor: "white",
-            color:"black",
-            border: "2px solid rgb(203 213 225)",
+
+        contained: {
+          fontWeight: 700,
+          fontSize: baseTheme.spacing(2),
+          backgroundImage: baseTheme.palette.blue.gradient,
+
+          '&:hover': {
+            filter: 'brightness(0.92)',
+          },
+
+          '&.Mui-disabled': {
+            backgroundImage: 'none',
+            backgroundColor: baseTheme.palette.action.disabledBackground,
+            color: baseTheme.palette.action.disabled,
+            filter: 'none',
           },
         },
-      ],
+
+        outlined: {
+          fontWeight: 400,
+          fontSize: baseTheme.spacing(2),
+          backgroundColor: 'white',
+          color: 'black',
+          border: '2px solid rgb(203 213 225)',
+
+          '&:hover': {
+            backgroundColor: 'rgba(0,0,0,0.04)',
+            borderColor: 'rgb(148 163 184)',
+          },
+
+          '&.Mui-disabled': {
+            backgroundColor: baseTheme.palette.action.disabledBackground,
+            color: baseTheme.palette.action.disabled,
+            borderColor: baseTheme.palette.action.disabledBackground,
+          },
+        },
+      },
     },
   },
 });

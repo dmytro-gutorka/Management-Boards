@@ -6,6 +6,8 @@ import {
   DialogTitle,
   Stack,
   TextField,
+  Typography,
+  useTheme,
 } from '@mui/material';
 import { useState } from 'react';
 import type { Card, ColumnId } from '../../api/configurations/types.ts';
@@ -30,9 +32,27 @@ export default function CardDialog(props: {
 
   const canSubmit = title.trim().length > 0;
 
+  const theme = useTheme();
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>{mode === 'create' ? 'Add card' : 'Edit card'}</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: theme.shape.borderRadiusXS,
+          },
+        },
+      }}
+    >
+      <DialogTitle>
+        <Typography variant="h6" fontWeight={700}>
+          {mode === 'create' ? 'Add card' : 'Edit card'}
+        </Typography>
+      </DialogTitle>
 
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
@@ -68,7 +88,7 @@ export default function CardDialog(props: {
           <span style={{ marginRight: 'auto' }} />
         )}
 
-        <Button onClick={onClose} disabled={!!isSaving || !!isDeleting}>
+        <Button variant="outlined" onClick={onClose} disabled={!!isSaving || !!isDeleting}>
           Cancel
         </Button>
 

@@ -4,13 +4,10 @@ type Props = {
   isEditing: boolean;
   name: string;
   onChange: (v: string) => void;
-
   onSave: () => void;
   onCancel: () => void;
-
   canSave: boolean;
   isSaving: boolean;
-
   title: string;
 };
 
@@ -48,9 +45,14 @@ export function BoardNameEditor({
           </Button>
         </>
       ) : (
-        <Typography variant="h6" fontWeight={800}>
-          {title}
-        </Typography>
+        <Stack flexDirection="row" alignItems="center" gap={1}>
+          <Typography variant="body1" fontWeight={700}>
+            Board Name:
+          </Typography>
+          <Typography variant="body2">
+            {title}
+          </Typography>
+        </Stack>
       )}
     </Stack>
   );

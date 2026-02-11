@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/material';
+import { IconButton, Stack, Tooltip, Typography } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
@@ -31,32 +31,32 @@ export function BoardCard({
 
   return (
     <Stack direction="row" alignItems="center" spacing={1} justifyContent="space-between">
-      <Box>
-        <Typography variant="overline" color="text.secondary">
-          Board ID
-        </Typography>
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Typography fontFamily="monospace">{board.boardId}</Typography>
-          <Tooltip title="Copy board ID">
-            <IconButton size="small" onClick={() => copy(board.boardId)}>
-              <ContentCopyIcon fontSize="inherit" />
-            </IconButton>
-          </Tooltip>
+        <Stack flexDirection="row" gap={1} alignItems="center">
+          <Typography variant="body1" fontWeight={700} >
+            Board ID:
+          </Typography>
+          <Stack direction="row" alignItems="center">
+            <Typography variant="body2">{board.boardId}</Typography>
+            <Tooltip title="Copy board ID"  >
+              <IconButton sx={{ padding: 0}}  onClick={() => copy(board.boardId)}>
+                <ContentCopyIcon  sx={{ ml: 0.5, maxWidth: '14px', maxHeight: "14px",}} fontSize="inherit" />
+              </IconButton>
+            </Tooltip>
+          </Stack>
         </Stack>
-      </Box>
 
       <Stack direction="row" spacing={1} alignItems="center">
         {!isEditing ? (
           <Tooltip title="Rename board">
             <IconButton onClick={() => setIsEditing(true)}>
-              <EditIcon />
+              <EditIcon htmlColor="rgb(68 100 239)" />
             </IconButton>
           </Tooltip>
         ) : null}
 
         <Tooltip title="Delete board">
-          <IconButton color="error" onClick={() => setConfirmOpen(true)} disabled={isDisabled}>
-            <DeleteOutlineIcon />
+          <IconButton onClick={() => setConfirmOpen(true)} disabled={isDisabled}>
+            <DeleteOutlineIcon  htmlColor="rgb(239 68 68)"/>
           </IconButton>
         </Tooltip>
       </Stack>
