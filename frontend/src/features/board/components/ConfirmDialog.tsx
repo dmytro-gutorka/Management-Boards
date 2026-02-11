@@ -5,6 +5,7 @@ import {
   DialogContent,
   DialogTitle,
   Typography,
+  useTheme,
 } from '@mui/material';
 
 export default function ConfirmDialog(props: {
@@ -30,11 +31,31 @@ export default function ConfirmDialog(props: {
     onClose,
   } = props;
 
+  const theme = useTheme();
+
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>{title}</DialogTitle>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="xs"
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: theme.shape.borderRadiusXS,
+          },
+        },
+      }}
+    >
+      <DialogTitle component="div">
+        <Typography variant="h6" component="div" fontWeight={700}>
+          {title}
+        </Typography>
+      </DialogTitle>{' '}
       <DialogContent>
-        <Typography sx={{ mt: 1 }}>{text}</Typography>
+        <Typography variant="body2" component="div" color="text.secondary">
+          {text}
+        </Typography>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onClose} disabled={isLoading}>

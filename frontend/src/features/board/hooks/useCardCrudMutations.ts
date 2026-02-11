@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createCard, deleteCard, updateCard } from '../../../api/cards';
 import type { Card, ColumnId } from '../../../api/configurations/types';
+import { useState } from 'react';
 
 type CreatePayload = { title: string; description: string };
 
@@ -10,6 +11,8 @@ export function useCardCrudMutations(args: {
   activeCard?: Card;
   onDone: () => void;
 }) {
+  const [delCard, setDeleteCard] = useState<Card | null>(null);
+
   const { boardId, dialogColumn, activeCard, onDone } = args;
   const qc = useQueryClient();
 
@@ -54,5 +57,26 @@ export function useCardCrudMutations(args: {
     },
   });
 
-  return { createMut, updateMut, deleteMut, deleteByIdMut };
+  const handleAskDelete = (card: Card) => setDeleteCard(card);
+  const handleCloseDelete = () => setDeleteCard(null);
+
+  const handleConfirmDelete = () => {
+    if (!delCard) return;
+
+    deleteByIdMut.mutate(delCard.id, {
+      onSuccess: () => setDeleteCard(null),
+      onError: () => setDeleteCard(null),
+    });
+  };
+
+  return {
+    createMut,
+    updateMut,
+    deleteMut,
+    deleteByIdMut,
+    handleAskDelete,
+    handleCloseDelete,
+    handleConfirmDelete,
+    delCard,
+  };
 }

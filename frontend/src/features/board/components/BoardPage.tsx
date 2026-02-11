@@ -7,7 +7,7 @@ import { useBoardQuery } from '../hooks/useBoardData.ts';
 import { useCardsQuery } from '../hooks/useCardsData.ts';
 import { useUiColumns } from '../hooks/useUiColumns.ts';
 import { useCardCrudMutations } from '../hooks/useCardCrudMutations.ts';
-import type { Card } from '../../../api/configurations/types.ts';
+import ConfirmDialog from './ConfirmDialog.tsx';
 
 type BoardPageProps = {
   boardId: string;
@@ -20,14 +20,20 @@ export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
   const cols = useUiColumns(boardId, cardsQ.data);
   const dialog = useCardDialogState();
 
-  const { createMut, updateMut, deleteMut, deleteByIdMut } = useCardCrudMutations({
+  const {
+    createMut,
+    updateMut,
+    deleteMut,
+    handleAskDelete,
+    handleCloseDelete,
+    handleConfirmDelete,
+    delCard,
+  } = useCardCrudMutations({
     boardId,
     dialogColumn: dialog.column,
     activeCard: dialog.activeCard,
     onDone: dialog.close,
   });
-
-  const handleDeleteCard = (card: Card) => deleteByIdMut.mutate(card.id);
 
   if (boardQ.isLoading) return <CircularProgress />;
   if (boardQ.isError) return <Alert severity="error">Board not found</Alert>;
@@ -43,7 +49,7 @@ export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
         error={cardsQ.isError}
         onAddCard={dialog.openCreate}
         onEditCard={dialog.openEdit}
-        onDeleteCard={handleDeleteCard}
+        onDeleteCard={handleAskDelete}
       />
 
       <CardDialog
@@ -56,6 +62,17 @@ export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
         onDelete={dialog.mode === 'edit' ? () => deleteMut.mutate() : undefined}
         isSaving={createMut.isPending || updateMut.isPending}
         isDeleting={deleteMut.isPending}
+      />
+
+      <ConfirmDialog
+        open={!!delCard}
+        title="Delete card?"
+        text="Are you sure you want to delete this card?"
+        confirmText="Delete"
+        cancelText="Cancel"
+        isLoading={deleteMut.isPending}
+        onClose={handleCloseDelete}
+        onConfirm={handleConfirmDelete}
       />
     </Stack>
   );
