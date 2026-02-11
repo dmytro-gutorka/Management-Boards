@@ -13,11 +13,11 @@ type Props = {
   error: boolean;
   onAddCard: (columnId: ColumnId) => void;
   onEditCard: (card: Card) => void;
+  onDeleteCard: (card: Card) => void;
 };
 
 export default function BoardDnD(props: Props) {
-  const { columns, onReorder, isLoading, error, onAddCard, onEditCard } = props;
-
+  const { columns, onReorder, isLoading, error, onAddCard, onEditCard, onDeleteCard } = props;
   const { sensors, onDragEnd, isEmpty } = useBoardDnD({ columns, onReorder });
 
   if (isLoading) return <CircularProgress />;
@@ -41,6 +41,7 @@ export default function BoardDnD(props: Props) {
                 cards={columns[col.id]}
                 onAdd={onAddCard}
                 onCardClick={onEditCard}
+                onDeleteCard={onDeleteCard}
               />
             </Box>
           ))}

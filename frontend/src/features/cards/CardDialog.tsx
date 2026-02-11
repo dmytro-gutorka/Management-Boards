@@ -25,7 +25,7 @@ export default function CardDialog(props: {
   isSaving?: boolean;
   isDeleting?: boolean;
 }) {
-  const { open, mode, card, onClose, onSubmit, onDelete, isSaving, isDeleting } = props;
+  const { open, mode, card, onClose, onSubmit, isSaving, isDeleting } = props;
 
   const [title, setTitle] = useState(card?.title ?? '');
   const [description, setDescription] = useState(card?.description ?? '');
@@ -75,19 +75,6 @@ export default function CardDialog(props: {
       </DialogContent>
 
       <DialogActions sx={{ px: 3, pb: 2 }}>
-        {mode === 'edit' && onDelete ? (
-          <Button
-            color="error"
-            onClick={onDelete}
-            disabled={!!isDeleting || !!isSaving}
-            sx={{ mr: 'auto' }}
-          >
-            Delete
-          </Button>
-        ) : (
-          <span style={{ marginRight: 'auto' }} />
-        )}
-
         <Button variant="outlined" onClick={onClose} disabled={!!isSaving || !!isDeleting}>
           Cancel
         </Button>

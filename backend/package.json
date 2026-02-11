@@ -7,7 +7,9 @@
         "build": "tsc",
         "start": "node dist/server.js",
         "lint": "eslint .",
-        "format": "prettier -w .",
+        "format:check": "prettier . --check",
+        "format": "prettier . --write",
+        "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "jest"
     },
     "keywords": [],

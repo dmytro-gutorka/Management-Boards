@@ -16,8 +16,8 @@ export function cardsToColumns(cards: Card[]): UiColumns {
 
 export function columnsToIds(cols: UiColumns): Record<ColumnId, string[]> {
   return {
-    todo: cols.todo.map((c) => c.id),
-    in_progress: cols.in_progress.map((c) => c.id),
-    done: cols.done.map((c) => c.id),
+    todo: cols.todo.filter(Boolean).map((c) => c.id),
+    in_progress: cols.in_progress.filter(Boolean).map((c) => c.id),
+    done: cols.done.filter(Boolean).map((c) => c.id),
   };
 }

@@ -53,13 +53,13 @@ export default function FormDialog(props: {
         },
       }}
     >
-      <DialogTitle>
+      <DialogTitle component="div">
         <Stack spacing={0.5}>
-          <Typography variant="h6" fontWeight={700}>
+          <Typography variant="h6" component="div" fontWeight={700}>
             {title}
           </Typography>
           {subtitle ? (
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" component="div" color="text.secondary">
               {subtitle}
             </Typography>
           ) : null}

@@ -46,5 +46,13 @@ export function useCardCrudMutations(args: {
     },
   });
 
-  return { createMut, updateMut, deleteMut };
+  const deleteByIdMut = useMutation({
+    mutationFn: (cardId: string) => deleteCard(boardId, cardId),
+    onSuccess: () => {
+      onDone()
+      invalidate();
+    }
+  });
+
+  return { createMut, updateMut, deleteMut, deleteByIdMut};
 }

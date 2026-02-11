@@ -7,6 +7,7 @@ import { useBoardQuery } from '../hooks/useBoardData.ts';
 import { useCardsQuery } from '../hooks/useCardsData.ts';
 import { useUiColumns } from '../hooks/useUiColumns.ts';
 import { useCardCrudMutations } from '../hooks/useCardCrudMutations.ts';
+import type { Card } from '../../../api/configurations/types.ts';
 
 type BoardPageProps = {
   boardId: string;
@@ -19,12 +20,14 @@ export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
   const cols = useUiColumns(boardId, cardsQ.data);
   const dialog = useCardDialogState();
 
-  const { createMut, updateMut, deleteMut } = useCardCrudMutations({
+  const { createMut, updateMut, deleteMut, deleteByIdMut } = useCardCrudMutations({
     boardId,
     dialogColumn: dialog.column,
     activeCard: dialog.activeCard,
     onDone: dialog.close,
   });
+
+  const handleDeleteCard = (card: Card) => deleteByIdMut.mutate(card.id);
 
   if (boardQ.isLoading) return <CircularProgress />;
   if (boardQ.isError) return <Alert severity="error">Board not found</Alert>;
@@ -40,6 +43,7 @@ export default function BoardPage({ boardId, onBoardDeleted }: BoardPageProps) {
         error={cardsQ.isError}
         onAddCard={dialog.openCreate}
         onEditCard={dialog.openEdit}
+        onDeleteCard={handleDeleteCard}
       />
 
       <CardDialog

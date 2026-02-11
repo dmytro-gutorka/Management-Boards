@@ -5,15 +5,23 @@ import { useDroppable } from '@dnd-kit/core';
 import CardItem from '../../../cards/CardItem.tsx';
 import type { Card, ColumnId } from '../../../../api/configurations/types.ts';
 
-export default function Column(props: {
+type ColumnProps = {
   columnId: ColumnId;
   title: string;
   cards: Card[];
   onAdd: (columnId: ColumnId) => void;
   onCardClick: (card: Card) => void;
-}) {
-  const { columnId, title, cards, onAdd, onCardClick } = props;
+  onDeleteCard: (card: Card) => void;
+};
 
+export default function Column({
+  columnId,
+  title,
+  cards,
+  onAdd,
+  onCardClick,
+  onDeleteCard,
+}: ColumnProps) {
   const { setNodeRef, isOver } = useDroppable({ id: columnId });
 
   return (
@@ -37,7 +45,7 @@ export default function Column(props: {
         <SortableContext items={cards.map((c) => c.id)} strategy={verticalListSortingStrategy}>
           <Stack ref={setNodeRef} spacing={1} sx={{ minHeight: 60 }}>
             {cards.map((c) => (
-              <CardItem key={c.id} card={c} onClick={() => onCardClick(c)} />
+              <CardItem key={c.id} card={c} onEdit={onCardClick} onDelete={onDeleteCard} />
             ))}
           </Stack>
         </SortableContext>

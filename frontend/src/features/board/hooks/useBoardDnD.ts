@@ -16,7 +16,10 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
   const cardToColumn = useMemo(() => {
     const map = new Map<string, ColumnId>();
     for (const colId of columnIds) {
-      for (const card of columns[colId]) map.set(card.id, colId);
+      for (const card of columns[colId]) {
+        if (!card) continue;
+        map.set(card.id, colId);
+      }
     }
     return map;
   }, [columns, columnIds]);
@@ -43,25 +46,35 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
     (e: DragEndEvent) => {
       const activeId = String(e.active.id);
       const overId = e.over?.id ? String(e.over.id) : null;
+
       if (!overId) return;
+      if (activeId === overId) return;
 
       const fromCol = cardToColumn.get(activeId);
       if (!fromCol) return;
 
       const toCol = resolveTargetColumn(overId, fromCol);
-
       const next = cloneColumns(columns, columnIds);
 
       const fromIdx = next[fromCol].findIndex((c: ColumnProp) => c.id === activeId);
+
       if (fromIdx < 0) return;
 
       const [moved] = next[fromCol].splice(fromIdx, 1);
 
+      if (!moved) return;
       if (toCol === fromCol) {
         const toIdx = next[toCol].findIndex((c: ColumnProp) => c.id === overId);
-        const targetIdx = toIdx >= 0 ? toIdx : next[toCol].length;
-        next[toCol] = arrayMove(next[toCol], fromIdx, targetIdx);
 
+        if (toIdx < 0) {
+          next[toCol].push(moved);
+          onReorder(next);
+          return;
+        }
+
+        const adjustedToIdx = toIdx > fromIdx ? toIdx - 1 : toIdx;
+
+        next[toCol] = arrayMove(next[toCol], fromIdx, adjustedToIdx);
         onReorder(next);
         return;
       }
@@ -73,8 +86,9 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
 
       onReorder(next);
     },
-    [cardToColumn, resolveTargetColumn, columns, columnIds, onReorder]
+    [cardToColumn, resolveTargetColumn, columns, columnIds, onReorder],
   );
+
 
   return {
     sensors,

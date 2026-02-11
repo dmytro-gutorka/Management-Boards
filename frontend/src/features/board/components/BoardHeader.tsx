@@ -2,13 +2,12 @@ import type { Board } from '../../../api/configurations/types';
 import ConfirmDialog from './ConfirmDialog';
 import { Stack } from '@mui/material';
 import { BoardCard } from './BoardCard';
-
 import { useEditableName } from '../hooks/useEditableName';
 import { useConfirmState } from '../hooks/useConfirmState';
 import { useBoardHeaderActions } from '../hooks/useBoardHeaderActions';
-
 import { BoardNameEditor } from './BoardNameEditor';
 import { SnackRenderer } from './SnackRenderer';
+
 
 type Props = { board: Board; onDeleted: () => void };
 
