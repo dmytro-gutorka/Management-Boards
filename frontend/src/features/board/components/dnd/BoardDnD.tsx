@@ -1,10 +1,12 @@
 import { Alert, CircularProgress, Stack, Box } from '@mui/material';
-import { DndContext } from '@dnd-kit/core';
+import { DndContext, DragOverlay } from '@dnd-kit/core';
+import { createPortal } from 'react-dom';
 import Column from './Column';
-import { useBoardDnD } from '../../hooks/useBoardDnD.ts';
-import type { Card, ColumnId } from '../../../../api/configurations/types.ts';
-import { COLUMNS } from '../../configs/columns.ts';
-import type { UiColumns } from '../../types/common.types.ts';
+import { useBoardDnD } from '../../hooks/useBoardDnD';
+import type { Card, ColumnId } from '../../../../api/configurations/types';
+import { COLUMNS } from '../../configs/columns';
+import type { UiColumns } from '../../types/common.types';
+import CardItem from '../../../cards/CardItem';
 
 type Props = {
   columns: UiColumns;
@@ -18,13 +20,22 @@ type Props = {
 
 export default function BoardDnD(props: Props) {
   const { columns, onReorder, isLoading, error, onAddCard, onEditCard, onDeleteCard } = props;
-  const { sensors, onDragEnd, isEmpty } = useBoardDnD({ columns, onReorder });
+
+  const { sensors, onDragStart, onDragCancel, onDragEnd, isEmpty, activeCard } = useBoardDnD({
+    columns,
+    onReorder,
+  });
 
   if (isLoading) return <CircularProgress />;
   if (error) return <Alert severity="error">Failed to load cards</Alert>;
 
   return (
-    <DndContext sensors={sensors} onDragEnd={onDragEnd}>
+    <DndContext
+      sensors={sensors}
+      onDragStart={onDragStart}
+      onDragCancel={onDragCancel}
+      onDragEnd={onDragEnd}
+    >
       <Stack spacing={2}>
         {isEmpty ? (
           <Alert severity="info">
@@ -47,6 +58,15 @@ export default function BoardDnD(props: Props) {
           ))}
         </Stack>
       </Stack>
+
+      {createPortal(
+        <DragOverlay dropAnimation={null}>
+          {activeCard ? (
+            <CardItem card={activeCard as any} onEdit={() => {}} onDelete={() => {}} isOverlay />
+          ) : null}
+        </DragOverlay>,
+        document.body,
+      )}
     </DndContext>
   );
 }

@@ -1,14 +1,20 @@
-import { useCallback, useMemo } from 'react';
-import { PointerSensor, useSensor, useSensors, type DragEndEvent } from '@dnd-kit/core';
+import { useCallback, useMemo, useState } from 'react';
+import {
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+  type DragStartEvent,
+} from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import type { ColumnId } from '../../../api/configurations/types';
 import { getColumnIds } from '../utils/getColumnIds.ts';
 import { cloneColumns } from '../utils/cloneColumns.ts';
 import type { ColumnProp, UseBoardDnDArgs, UseBoardDnDResult } from '../types/common.types.ts';
-import { sanitizeColumns } from '../utils/sanitizeColumns.ts';
 
 export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDnDResult {
   const columnIds = useMemo(() => getColumnIds(), []);
+  const [activeId, setActiveId] = useState<string | null>(null);
 
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 5 } }));
 
@@ -31,7 +37,6 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
   const resolveTargetColumn = useCallback(
     (overId: string, fallback: ColumnId): ColumnId => {
       if (isColumnId(overId)) return overId;
-
       return cardToColumn.get(overId) ?? fallback;
     },
     [cardToColumn, isColumnId],
@@ -41,24 +46,44 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
     return columnIds.reduce((sum, id) => sum + columns[id].length, 0);
   }, [columns, columnIds]);
 
+  const activeCard = useMemo(() => {
+    if (!activeId) return null;
+    for (const colId of columnIds) {
+      const found = columns[colId].find((c) => c?.id === activeId);
+      if (found) return found as ColumnProp;
+    }
+    return null;
+  }, [activeId, columns, columnIds]);
+
+  const onDragStart = useCallback((e: DragStartEvent) => {
+    setActiveId(String(e.active.id));
+  }, []);
+
+  const onDragCancel = useCallback(() => {
+    setActiveId(null);
+  }, []);
+
   const onDragEnd = useCallback(
     (e: DragEndEvent) => {
-      const activeId = String(e.active.id);
+      const currentActiveId = String(e.active.id);
       const overId = e.over?.id ? String(e.over.id) : null;
-      if (!overId || activeId === overId) return;
 
-      const fromCol = cardToColumn.get(activeId);
+      setActiveId(null);
+
+      if (!overId || currentActiveId === overId) return;
+
+      const fromCol = cardToColumn.get(currentActiveId);
       if (!fromCol) return;
 
       const toCol = resolveTargetColumn(overId, fromCol);
 
       const next = cloneColumns(columns, columnIds);
 
-      const fromIdx = next[fromCol].findIndex((c: ColumnProp) => c.id === activeId);
+      const fromIdx = next[fromCol].findIndex((c: ColumnProp) => c?.id === currentActiveId);
       if (fromIdx < 0) return;
 
       if (toCol === fromCol) {
-        const toIdx = next[toCol].findIndex((c: ColumnProp) => c.id === overId);
+        const toIdx = next[toCol].findIndex((c: ColumnProp) => c?.id === overId);
         if (toIdx < 0) return;
 
         next[toCol] = arrayMove(next[toCol], fromIdx, toIdx);
@@ -69,7 +94,7 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
       const [moved] = next[fromCol].splice(fromIdx, 1);
       if (!moved) return;
 
-      const toIdx = next[toCol].findIndex((c: ColumnProp) => c.id === overId);
+      const toIdx = next[toCol].findIndex((c: ColumnProp) => c?.id === overId);
       const insertIdx = toIdx >= 0 ? toIdx : next[toCol].length;
 
       next[toCol].splice(insertIdx, 0, { ...moved, column: toCol });
@@ -81,9 +106,12 @@ export function useBoardDnD({ columns, onReorder }: UseBoardDnDArgs): UseBoardDn
 
   return {
     sensors,
+    onDragStart,
+    onDragCancel,
     onDragEnd,
     columnIds,
     totalCards,
     isEmpty: totalCards === 0,
+    activeCard,
   };
 }
